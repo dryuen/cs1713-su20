@@ -1,0 +1,12 @@
+Random Number Generator Report
+------------------------------
+random number 0: 83
+random number 1: 86
+random number 2: 77
+random number 3: 15
+random number 4: 93
+random number 5: 35
+random number 6: 86
+random number 7: 92
+------------------------------
+total number of random values: 8
