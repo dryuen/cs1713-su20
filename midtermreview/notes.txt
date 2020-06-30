@@ -1,0 +1,287 @@
+
+
+int x = 3 < 2;
+what is x?  x is 0
+
+what constitutes a "true" value? anything but 0, but default is 1 
+
+
+-------
+
+#define MAX 3
+int x = MAX; /* preprocessor, int x = 3; */
+
+--------
+
+int i; /* the for loop variable must be declared for the for loop */
+for( i = 0; i < 10; i++ )
+{
+}
+/* i still in scope and has a value (10) after the for loop */
+
+---------
+
+int x[] = { 3, 2 }; /* the [] in the array declaration come after the variable */
+int i;
+
+for( i = 0; i < 99999; i++ )
+    printf( "%d\n", x[ i ] );
+/* this compiles ! and it prints out garbage */
+
+-----------
+
+
+Practice taking the instructions and "translating them to C"
+
+The function takes in two strings and the size of the array as parameters. Assume that both strings are of the same size as parameters. The size includes all characters plus the null terminator.   
+
+void copyCapitalLetters( char* str1, char* str, int size )
+{
+    /* could also use char str1[], char str[ 10 ] */
+}
+
+--------------
+
+"HELLO" -> six char's because of '\0'
+
+---------------
+
+A struct that represents a person. Its data members include a last name, birth year, and height in meters. HINT: average height in meters in the US range from 1.62 to 1.75.  
+
+/* typically goes in header file, translate into C quickly  */
+typedef struct Person
+{
+    char lastName[ 50 ];
+    int birthYear;
+    double height;
+} Person;
+
+
+/* how do we access the data members of a struct variable? it depends on:
+    is the struct variable a single struct object? . 
+    is the struct variable a single dynamically allocated struct object? ->
+    is the struct variable an array of structs? subscript operator followed by .
+*/
+Person p;
+p.birthYear = 100;
+
+Person* q;
+q = (Person*) malloc( sizeof( Person ) );
+/* usually, you should check to see of q is NULL */
+q->birthYear = 100;
+
+Person q[ 100 ];
+q[ 0 ].birthYear = 100;
+
+
+int getYear( Person p )
+{
+    return p.birthYear;
+}
+
+---------------
+
+Parameters Macros - preprocessor
+Look like functions, but aren't
+
+#define doMagic1( a, b ) a * b + 3
+
+int x = doMagic1( 1, 2 ); /* int x = 1 * 2 + 3; */
+int y = doMagic1( 1, 2 ) * 2; /* int x = 1 * 2 + 3 * 2 */
+
+/* always replace macros first before evaluation */
+
+
+#define MAX 3;
+
+int x = MAX; /* int x = 3;; */
+int y = MAX * 2; /* int y = 3; * 2; syntax error */
+int z = MAX 2; /* int z = MAX; 2; */
+
+---------------
+
+Makefile
+
+target: prerequisites 
+    make recipe (our Linux / gcc commands)
+
+We have two special targets:
+    all: the prereqs are all the object files (see the targets with .o)
+        gcc (list all .o files) -o myprogram
+    clean:
+        rm -rf *.o
+        rm (name of executable)
+
+
+Then, we need a target for each .c file
+
+dicegame.o: dicegame.c dicegame.h /* list out all the header files you created and included */
+	gcc -c dicegame.c -o dicegame.o
+
+
+-------
+
+void doSomething()
+{
+    static int x = 10;
+    x = x + 5;
+    printf( "%d", x );
+}
+
+/* static variables persist for the lifetime of the program */
+
+doSomething(); /* prints 15 */
+doSomething(); /* prints 20 */
+
+--------------
+
+For pointers, know what they're point in terms of memory locations. You can have multiple pointers pointing at the same place.
+
+int x = 10;
+int* ptr;
+ptr = &x;
+
+int y = x;
+int y = *ptr; /* The * is dereference, go to the memory location of where ptr is pointing at and get the value */
+
+*ptr = 30;
+
+/* here, printing out x and *ptr will give us 30 for both values */
+
+*ptr = *ptr + 3;
+
+ptr = ptr + 3; /* changing the memory location: where does it change it to? We don't know */
+
+----------
+
+int array[ ] = { 3, 4, 5 };
+
+index 0: 3 which is at address 0xffffff000000
+index 1: 4 which is at address 0xffffff000004
+index 2: 5 which is at address 0xffffff000008
+
+int* ptr = array + 1; /* equivalent to int* ptr = &array[ 1 ] */
+ptr = ptr + 10;
+
+----------
+Post Increment
+int x = 10;
+int y = x++; /* increment x by 1 AFTER the rest of the expression is completed */
+
+equivalent
+
+int x = 10;
+int y = x;
+x = x + 1;
+
+
+Pre Increment
+int x = 10;
+int y = ++x; /* increment x by 1 BEFORE the rest of expression is completed */
+
+equivalent
+
+int x = 10;
+x = x + 1;
+int y = x;
+
+-----------------
+
+int array[ ] = { 3, 4, 5 };
+int* ptr = array + 1;
+
+Example 2
+*++ptr;
+int x = ( * ( ++ptr ) ); /* pre increment ptr then dereference */
+
+Example 1
+*ptr++;     /* unary operators are evaluated right to left */
+int x = ( * ( ptr ++ ) ) equivalent to 4; ptr = ptr + 1
+
+----------
+
+int myArray[ ROWS ][ COLS ] = { { 50, 70, 90 }, { 30, 20, 10 }, { 10, 50, 90 } };   
+
+int *ptrA = &myArray[ 1 ][ 2 ];   
+int *ptrB = ptrA + 3;             
+int *ptrC = ptrA--;   
+*ptrA = ++*ptrB + 100;   ( ++ ( * (ptrB) )  ) + 100
+*ptrB = 100;   
+ptrC = ptrC - 2;
+
+/* notes */
+int myArray[ ROWS ][ COLS ] = { { 50, 70, 90 }, { 30, 191, 10 }, { 10, 50, 100 } };   
+ptrA -> array[ 1 ][ 1 ] -> 191         //array[ 1 ][ 2 ] -> 10
+ptrB -> array[ 2 ][ 2 ] -> 100
+ptrC -> array[ 1 ][ 0 ] -> 30 
+
+What are the dereferenced values of ptrA, ptrB, ptrC?
+
+
+-------------
+
+With files, if you open a file for reading/writing, you should check to see if the file opened. Compare the file pointer against NULL
+
+After you are done with the file, close it.
+
+----------
+
+With CSV files, because it's in rows, we used fgets
+
+After fgets, we used the sscanf to break apart the columns
+
+For string values in a CSV, we use this %[^,] otherwise, %s may take the rest of the row as one string
+
+------------
+
+Command line arguments 
+First command line argument is always the name of the executable
+
+./a.out alpha beta gamma delta epsilon
+
+the number of command line arguments is in argc (main params)
+the arguments themselves are strings in argv array
+
+in this example, if we were expecting 5 additional command line arguments, always check against argc first
+
+if( argc >= 6 )
+{
+    // do something with argv[ 5 ] 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
