@@ -1,0 +1,177 @@
+What is recursion?
+
+What we see in code is that a function that calls itself (directly or indirectly)
+Solving the larger problem by solving the smaller problem using the same approach
+and putting the smaller solutions together.
+
+We usually write the base case(s) and the recursive call(s)
+
+When we trace a recursive call, we can use the pseudocode notation or draw out
+a call stack representation
+
+int doSomething( int x )
+{
+    if( x < 2 )
+        return 3;
+
+    if( x % 3 == 1 )
+        return 1 + doSomething( x - 2 );
+
+    return 2 + doSomething( x - 3 );
+}
+
+What is returned from doSomething( 5 );
+
+doS( 5 ) -> return 2 + 5// doS( 2 )
+doS( 2 ) -> return 2 + 3 //doS( -1 )
+doS( -1 ) -> return 3 
+
+If the recursive function was void, the base case would usually just have a return;
+
+------------
+
+Binary Search - works on a sorted array, and finds a value by dividing the array in half in each iteration of the search
+
+Trace a binary search
+
+Know the code for it, know what each line does and if something was missing, what 
+was it?
+
+Sorting - we had four sorting algorithms. Know the code for it and the general
+behaviors: bubble, insertion, selection, merge
+
+If you were sorting an array of structs, how would this code change?
+    Figure out which of the data members in the struct we will sort by
+    The comparisons will be made on that data member
+    Use structArray[ i ].datamember
+    We have to swap all data members when we need to swap
+
+-------------
+Data structure - in any data structure, it's a system of data nodes or elements connected together
+    Each node stores data (one of those data members is a pointer to another node)
+    Each node is defined by a struct
+    Each node is dynamically allocated (and deallocated)
+
+Linked Lists
+
+It's a data structure which is made up of linear set of nodes with each node pointing at another node. Each node has a pointer to the next node in the list. 
+
+We always need to keep track of the head of a linked list. That's how we will get to the other elements in the linked list.
+
+The last node's next pointer points at NULL. The default initialization for a next pointer is usually NULL.
+
+If the head pointer is pointing at null, what does that mean? The list is empty. You should initialize your head pointer to NULL when you declare your variable.
+
+// basic for loop traversal
+LLNode* head = NULL;
+LLNode* ptr;
+
+for( ptr = head; ptr != NULL; ptr = ptr->next )
+{
+    printf( "%d\t", ptr->value );
+    if( ptr->next != NULL )
+        printf( "next value: %d\t", ptr->next->value );
+}
+
+If ptr->next is NULL, what do we know about ptr? Then, ptr is pointing at the last node in the linked list. 
+
+------
+
+Let's say you will write a recursive function to sum up all the even values:
+
+int sum( LLNode* n )
+{
+    if( n == NULL )
+        return 0;
+
+    if( n->value % 2 == 0 ) 
+        return n->value + sum( n->next );
+
+    return 0 + sum( n->next );
+}
+
+In the initial call, we pass in the head of the linked list
+
+h -> 20 -> 40 -> 17 -> 30 -> 42 -> NULL
+
+sum( 20 ) -> return 20 + sum( 40 )
+sum( 40 ) -> return 40 + sum( 17 )
+sum( 17 ) -> return 0 + sum( 30 )
+sum( 30 ) -> return 30 + sum( 42 )
+sum( 42 ) -> return 42 + sum( NULL )
+sum( NULL ) -> return 0
+
+-------
+
+void printLL( LLNode *n )
+{
+    if( n == NULL )
+        return;
+
+    printLL( n->next );
+    printf( "%d\t", n->value );
+}
+
+printLL( 20 ) -> printLL( 40 ) then print 20
+printLL( 40 ) -> printLL( 17 ) then print 40 
+printLL( 17 ) -> printLL( 30 ) then print 17 
+printLL( 30 ) -> printLL( 42 ) then print 30 
+printLL( 42 ) -> printLL( NULL ) then print 42
+printLL( NULL ) -> return
+
+When we write a function insert a new node or remove a node, it should return the pointer to the head of the linked list. In the caller, we reassign the head with what this function returns.
+
+head = insertNode( head, newNode );
+
+You can have multiple extra pointers pointing at the linked list nodes
+h -> 20 -> 40 -> 17 -> 30 -> 42 -> NULL
+
+ptrA is pointing at 40
+ptrB is pointing at 17
+
+ptrC is pointing at new node, how do you insert ptrC's node between 40 and 17?
+
+ptrC->next = ptrB;
+ptrA->next = ptrC;
+
+-----------------------
+
+BST - data elements are organized in a hierarchical structure, each node is pointing to at most 2 other nodes. They are sorted (left values are lower, right values are higher)
+
+void traverse( BSTNode* n )
+{
+    if( n == NULL )
+        return;
+
+    traverse( n->left );
+    traverse( n->right );
+
+}
+
+Know the code and how the base traversal code is at the foundation of the other functions
+Know the different orders
+Know what tree you get based on the insertion order
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
